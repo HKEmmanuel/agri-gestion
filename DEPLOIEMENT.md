@@ -227,3 +227,5 @@ Si vous rencontrez des problèmes, vérifiez :
 3. La console du navigateur (F12)
 
 Bonne chance ! 🚀
+
+le site https://agri-gestion.vercel.app/
