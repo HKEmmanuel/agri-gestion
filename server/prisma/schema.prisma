@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("exploitant") // "admin" or "exploitant"
+  exploitations Exploitation[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Exploitation {
+  id        Int      @id @default(autoincrement())
+  name      String
+  location  String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parcelles Parcelle[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Parcelle {
+  id             Int      @id @default(autoincrement())
+  name           String
+  area           Float    // in hectares or m2
+  exploitationId Int
+  exploitation   Exploitation @relation(fields: [exploitationId], references: [id], onDelete: Cascade)
+  cultures       Culture[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Culture {
+  id          Int      @id @default(autoincrement())
+  type        String   // e.g., "Maize", "Wheat"
+  sowingDate  DateTime
+  harvestDate DateTime?
+  status      String   @default("active") // "active", "harvested"
+  isValidated Boolean  @default(false)
+  parcelleId  Int
+  parcelle    Parcelle @relation(fields: [parcelleId], references: [id], onDelete: Cascade)
+  charges     Charge[]
+  recoltes    Recolte[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Charge {
+  id          Int      @id @default(autoincrement())
+  type        String   // "seed", "fertilizer", "labor", etc.
+  amount      Float
+  date        DateTime
+  cultureId   Int
+  culture     Culture  @relation(fields: [cultureId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Recolte {
+  id          Int      @id @default(autoincrement())
+  quantity    Float    // kg or tons
+  price       Float    // price per unit
+  date        DateTime
+  cultureId   Int
+  culture     Culture  @relation(fields: [cultureId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
