@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -14,23 +14,17 @@ const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
     try {
       await register(email, password, name, 'exploitant');
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
+    } finally {
+      setLoading(false);
     }
   };
-setLoading(true)
-
-try{
-  register(email, password, name, 'exploitant');
-  navigate('/');
-} catch (err) {
-  setError(err.response?.data?.message || 'Registration failed');
-} finally {
-  setLoading(false)
-}
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -70,13 +64,14 @@ try{
           </div>
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200"
-          disabled={loading}> 
+            className={`w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={loading}
+          > 
             {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
          <div className="mt-4 text-center">
-            <a href="/login" className="text-sm text-green-600 hover:underline">Already have an account? Login</a>
+            <Link to="/login" className="text-sm text-green-600 hover:underline">Already have an account? Login</Link>
         </div>
       </div>
     </div>
