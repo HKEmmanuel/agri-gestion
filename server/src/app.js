@@ -14,8 +14,8 @@ const app = express();
 const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
-      'http://localhost:5173',
-      'http://localhost:3000',
+      'https://agri-gestion.vercel.app',  
+      'https://agri-gestion.onrender.com',
       /\.vercel\.app$/,  // Allow all Vercel deployments
       /\.onrender\.com$/ // Allow Render deployments
     ];

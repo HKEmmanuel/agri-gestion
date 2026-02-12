@@ -11,6 +11,16 @@ import CultureDetails from './pages/CultureDetails';
 import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
 import Sidebar from './components/Sidebar';
+import ProtectedRoute from './components/ProtectedRoute';
+
+<Route 
+  path="/dashboard" 
+  element={
+    <ProtectedRoute>
+      <Dashboard />
+    </ProtectedRoute>
+  }
+/>
 
 const Layout = ({ children }) => {
   const { user } = useContext(AuthContext);

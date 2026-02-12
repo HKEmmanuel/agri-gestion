@@ -9,6 +9,8 @@ const Register = () => {
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
   const [error, setError] = useState('');
+const [loading, setLoading] = useState(false)
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,6 +21,16 @@ const Register = () => {
       setError(err.response?.data?.message || 'Registration failed');
     }
   };
+setLoading(true)
+
+try{
+  register(email, password, name, 'exploitant');
+  navigate('/');
+} catch (err) {
+  setError(err.response?.data?.message || 'Registration failed');
+} finally {
+  setLoading(false)
+}
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -59,8 +71,8 @@ const Register = () => {
           <button
             type="submit"
             className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200"
-          >
-            Register
+          disabled={loading}> 
+            {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
          <div className="mt-4 text-center">
