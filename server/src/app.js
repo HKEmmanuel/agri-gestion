@@ -15,8 +15,8 @@ const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
       'https://agri-gestion.vercel.app',
-      /\.vercel\.app$/,
-      /\.onrender\.com$/
+  /\.vercel\.app$/,
+  /\.railway\.app$/
     ];
 
     if (!origin) return callback(null, true);
