@@ -14,32 +14,31 @@ const app = express();
 const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
-      'https://agri-gestion.vercel.app',  
-      'https://agri-gestion.onrender.com',
-      /\.vercel\.app$/,  // Allow all Vercel deployments
-      /\.onrender\.com$/ // Allow Render deployments
+      'https://agri-gestion.vercel.app',
+      /\.vercel\.app$/,
+      /\.onrender\.com$/
     ];
-    
-    // Allow requests with no origin (like mobile apps or curl requests)
+
     if (!origin) return callback(null, true);
-    
-    const isAllowed = allowedOrigins.some(allowed => {
-      if (allowed instanceof RegExp) {
-        return allowed.test(origin);
-      }
-      return allowed === origin;
-    });
-    
+
+    const isAllowed = allowedOrigins.some(allowed =>
+      allowed instanceof RegExp ? allowed.test(origin) : allowed === origin
+    );
+
     if (isAllowed) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 };
 
+
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 
 app.get('/', (req, res) => {
