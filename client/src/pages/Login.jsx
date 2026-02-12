@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -12,11 +12,15 @@ const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
     try {
       await login(email, password);
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -48,13 +52,14 @@ const [loading, setLoading] = useState(false)
           </div>
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200"
+            className={`w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={loading}
           >
-            Sign In
+            {loading ? 'Logging in...' : 'Sign In'}
           </button>
         </form>
         <div className="mt-4 text-center">
-            <a href="/register" className="text-sm text-green-600 hover:underline">Create an account</a>
+            <Link to="/register" className="text-sm text-green-600 hover:underline">Create an account</Link>
         </div>
       </div>
     </div>
