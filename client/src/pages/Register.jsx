@@ -20,7 +20,20 @@ const [loading, setLoading] = useState(false)
       await register(email, password, name, 'exploitant');
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      console.error('Registration error:', err);
+      let errorMessage = 'Registration failed';
+      if (err.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        errorMessage = `Server Error (${err.response.status}): ${err.response.data.message || JSON.stringify(err.response.data)}`;
+      } else if (err.request) {
+        // The request was made but no response was received
+        errorMessage = 'Network Error: No response from server. Check your connection or API URL.';
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        errorMessage = `Request Error: ${err.message}`;
+      }
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -30,7 +43,19 @@ const [loading, setLoading] = useState(false)
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-6 text-center text-green-700">Create Account</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+        
+        {/* Debug info - user please remove after fixing */}
+        <div className="mb-4 p-2 bg-yellow-100 text-xs text-yellow-800 rounded">
+          <p>Debug Info:</p>
+          <p>API: {import.meta.env.VITE_API_URL || 'localhost'}</p>
+        </div>
+
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <strong className="font-bold">Error: </strong>
+            <span className="block sm:inline">{error}</span>
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
             <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">Name</label>
