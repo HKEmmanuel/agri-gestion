@@ -12,33 +12,14 @@ const app = express();
 
 // CORS configuration for production and development
 const corsOptions = {
-  origin: function (origin, callback) {
-    const allowedOrigins = [
-      'https://agri-gestion.vercel.app',
-  /\.vercel\.app$/,
-  /\.railway\.app$/
-    ];
-
-    if (!origin) return callback(null, true);
-
-    const isAllowed = allowedOrigins.some(allowed =>
-      allowed instanceof RegExp ? allowed.test(origin) : allowed === origin
-    );
-
-    if (isAllowed) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: '*', // Allow all origins for debugging
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 };
 
-
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.use(cors()); // Use default CORS for now (allows all)
+app.options('*', cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
