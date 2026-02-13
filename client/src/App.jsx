@@ -28,7 +28,7 @@ const AuthenticatedLayout = ({ children }) => {
         <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row transition-all duration-300">
             <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} logout={logout} user={user} />
             
-            <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${sidebarOpen ? 'md:ml-64' : 'md:ml-20'}`}>
+            <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 md:ml-64`}>
                 {/* Mobile Header */}
                 <div className="md:hidden sticky top-0 w-full bg-green-700 text-white z-40 p-4 flex items-center justify-between shadow-md">
                     <div className="flex items-center gap-3">
