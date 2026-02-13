@@ -1,8 +1,37 @@
 @import "tailwindcss";
 
 @layer base {
+  html, body {
+    height: 100dvh; /* Dynamic viewport height specifically for mobile */
+    width: 100%;
+    overscroll-behavior-y: none; /* Prevents pull-to-refresh unless handled */
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent; /* Remove highlight on tap */
+  }
+
   body {
     font-family: 'Inter', sans-serif;
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-gray-50 text-gray-900 overflow-x-hidden antialiased;
+  }
+
+  #root {
+    height: 100%;
+    isolation: isolate;
+  }
+  
+  /* Modern scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
   }
 }
