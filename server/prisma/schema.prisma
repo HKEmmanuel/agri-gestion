@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://agri_user:P1fi6nrUxkZaKTHWHY4NH7kAGmSxrnf6@dpg-d66et7bnv86c738pvbtg-a/agri_gestion"
+  url      = env("DATABASE_URL")
 }
 
 model User {

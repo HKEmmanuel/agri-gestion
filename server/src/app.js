@@ -7,8 +7,12 @@ const cultureRoutes = require('./routes/cultureRoutes');
 const chargeRoutes = require('./routes/chargeRoutes');
 const recolteRoutes = require('./routes/recolteRoutes');
 const userRoutes = require('./routes/userRoutes');
+const initAdmin = require('./utils/initAdmin');
 
 const app = express();
+
+// Initialize Admin User
+initAdmin();
 
 // CORS configuration for production and development
 const corsOptions = {
