@@ -81,27 +81,156 @@ const Dashboard = () => {
     }
   };
 
-  const generatePDF = () => {
+import html2canvas from 'html2canvas';
+
+  const generatePDF = async () => {
     const doc = new jsPDF();
-    doc.setFontSize(18);
-    doc.text('Rapport Économique - Agri-Gestion', 14, 22);
-    doc.setFontSize(11);
+    const pageWidth = doc.internal.pageSize.getWidth();
+    
+    // 1. Header & Title
+    doc.setFontSize(22);
+    doc.setTextColor(22, 163, 74); // Green
+    doc.text('Rapport Détaillé - Agri-Gestion', pageWidth / 2, 20, { align: 'center' });
+    
+    doc.setFontSize(12);
     doc.setTextColor(100);
-    doc.text(`Propriétaire : ${user?.name}`, 14, 32);
-    doc.text(`Date du rapport : ${new Date().toLocaleDateString()}`, 14, 38);
-    const tableColumn = ["ID", "Nom de l'Exploitation", "Localisation", "Nb Parcelles"];
-    const tableRows = [];
-    exploitations.forEach(exp => {
-      tableRows.push([exp.id, exp.name, exp.location, exp.parcelles?.length || 0]);
-    });
-    autoTable(doc, {
-      head: [tableColumn],
-      body: tableRows,
-      startY: 45,
-      theme: 'striped',
-      headStyles: { fillColor: [22, 163, 74] }
-    });
-    doc.save(`Rapport_Agri_${user?.name}.pdf`);
+    doc.text(`Généré par : ${user?.name}`, 14, 35);
+    doc.text(`Date : ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 14, 42);
+    doc.line(14, 45, pageWidth - 14, 45); // Horizontal line
+
+    let finalY = 50;
+
+    // 2. Capture Chart
+    const chartElement = document.getElementById('economic-chart');
+    if (chartElement) {
+        try {
+            const canvas = await html2canvas(chartElement, { scale: 2 });
+            const imgData = canvas.toDataURL('image/png');
+            const imgHeight = (canvas.height * 180) / canvas.width;
+            
+            doc.setFontSize(14);
+            doc.setTextColor(0);
+            doc.text('1. Analyse Graphique', 14, finalY);
+            doc.addImage(imgData, 'PNG', 15, finalY + 5, 180, 100); // 180 width, fixed height approx
+            finalY += 115;
+        } catch (err) {
+            console.error("Chart capture failed", err);
+        }
+    }
+
+    // 3. Detailed Data
+    doc.setFontSize(14);
+    doc.setTextColor(0);
+    doc.text('2. Détails par Exploitation', 14, finalY);
+    finalY += 10;
+
+    for (const exp of exploitations) {
+        // Check functionality for page break
+        if (finalY > 250) { doc.addPage(); finalY = 20; }
+
+        // Exploitation Header
+        doc.setFillColor(240, 253, 244); // Light Green bg
+        doc.rect(14, finalY, pageWidth - 28, 10, 'F');
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(22, 103, 34); // Dark Green
+        doc.text(`Exploitation : ${exp.name} (${exp.location})`, 16, finalY + 7);
+        finalY += 15;
+
+        // Parcelles
+        if (!exp.parcelles || exp.parcelles.length === 0) {
+           doc.setFont('helvetica', 'italic');
+           doc.setFontSize(10);
+           doc.setTextColor(150);
+           doc.text("Aucune parcelle enregistrée.", 20, finalY);
+           finalY += 10;
+        } else {
+            for (const parc of exp.parcelles) {
+                if (finalY > 250) { doc.addPage(); finalY = 20; }
+                
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(11);
+                doc.setTextColor(50);
+                doc.text(`- Parcelle : ${parc.name} (${parc.area} ha)`, 20, finalY);
+                finalY += 8;
+
+                // Cultures
+                if (!parc.cultures || parc.cultures.length === 0) {
+                    doc.setFont('helvetica', 'italic');
+                    doc.setFontSize(10);
+                    doc.text("  (Aucune culture)", 25, finalY);
+                    finalY += 8;
+                } else {
+                    for (const cult of parc.cultures) {
+                        if (finalY > 260) { doc.addPage(); finalY = 20; }
+
+                        doc.setFont('helvetica', 'normal');
+                        doc.setFontSize(10);
+                        doc.setTextColor(80);
+                        doc.text(`  > Culture : ${cult.type} (Semis: ${new Date(cult.sowingDate).toLocaleDateString()})`, 25, finalY);
+                        
+                        // Prepare table data for Charges & Recoltes combined or separate
+                        // Let's do a summary table for this culture
+                        
+                        const chargesRows = cult.charges?.map(c => [
+                            new Date(c.date).toLocaleDateString(), 
+                            c.type, 
+                            `${c.amount.toLocaleString()} FCFA`
+                        ]) || [];
+
+                        if (chargesRows.length > 0) {
+                            autoTable(doc, {
+                                head: [['Date', 'Type de Charge', 'Montant']],
+                                body: chargesRows,
+                                startY: finalY + 2,
+                                margin: { left: 30 },
+                                theme: 'grid',
+                                headStyles: { fillColor: [220, 38, 38], fontSize: 8 }, // Red for charges
+                                styles: { fontSize: 8 },
+                                tableWidth: 150
+                            });
+                            finalY = doc.lastAutoTable.finalY + 5;
+                        }
+
+                        const recoltesRows = cult.recoltes?.map(r => [
+                            new Date(r.date).toLocaleDateString(), 
+                            `${r.quantity} kg`, 
+                            `${r.price} FCFA/kg`,
+                            `${(r.quantity * r.price).toLocaleString()} FCFA`
+                        ]) || [];
+
+                        if (recoltesRows.length > 0) {
+                            autoTable(doc, {
+                                head: [['Date', 'Quantité', 'Prix Unit.', 'Total Revenu']],
+                                body: recoltesRows,
+                                startY: finalY + 2,
+                                margin: { left: 30 },
+                                theme: 'grid',
+                                headStyles: { fillColor: [22, 163, 74], fontSize: 8 }, // Green for revenue
+                                styles: { fontSize: 8 },
+                                tableWidth: 150
+                            });
+                            finalY = doc.lastAutoTable.finalY + 5;
+                        }
+
+                        // Financial Summary for Culture
+                        const totalCharges = cult.charges?.reduce((s, c) => s + c.amount, 0) || 0;
+                        const totalRevenus = cult.recoltes?.reduce((s, r) => s + (r.quantity * r.price), 0) || 0;
+                        const resultat = totalRevenus - totalCharges;
+
+                        if (finalY > 270) { doc.addPage(); finalY = 20; }
+                        doc.setFont('helvetica', 'bold');
+                        doc.setTextColor(resultat >= 0 ? 22 : 220, resultat >= 0 ? 163 : 38, resultat >= 0 ? 74 : 38);
+                        doc.text(`  Bilan Culture : ${resultat >= 0 ? '+' : ''}${resultat.toLocaleString()} FCFA`, 120, finalY);
+                        finalY += 10;
+                    }
+                }
+            }
+        }
+        finalY += 5; // Spacing between exploitations
+    }
+
+    doc.save(`Rapport_Complet_Agri_${user?.name}.pdf`);
   };
 
   useEffect(() => {
@@ -318,7 +447,7 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
             <div className="bg-white p-6 rounded-lg shadow">
                 <h3 className="text-lg font-semibold mb-6">Performance Économique par Exploitation</h3>
-                <div className="h-80">
+                <div id="economic-chart" className="h-80 box-border p-2 bg-white">
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={chartData}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} />
