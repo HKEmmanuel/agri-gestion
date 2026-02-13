@@ -3,7 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../services/api';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { Loader2, Plus, Download, ShieldCheck, Pencil, Trash2, User as UserIcon } from 'lucide-react';
+import { Loader2, Plus, Download, ShieldCheck, Pencil, Trash2, User as UserIcon, TrendingUp } from 'lucide-react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Link } from 'react-router-dom';
