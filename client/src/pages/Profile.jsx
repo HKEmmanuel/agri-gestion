@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
-import { User, Mail, Shield, Save, ArrowLeft } from 'lucide-react';
+import { User, Mail, Shield, Save, ArrowLeft, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Profile = () => {
