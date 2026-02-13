@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { Mail, Lock, User, UserPlus, Loader2, Leaf } from 'lucide-react';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -9,8 +10,7 @@ const Register = () => {
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
   const [error, setError] = useState('');
-const [loading, setLoading] = useState(false)
-
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,17 +21,13 @@ const [loading, setLoading] = useState(false)
       navigate('/');
     } catch (err) {
       console.error('Registration error:', err);
-      let errorMessage = 'Registration failed';
+      let errorMessage = 'Échec de l\'inscription';
       if (err.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        errorMessage = `Server Error (${err.response.status}): ${err.response.data.message || JSON.stringify(err.response.data)}`;
+        errorMessage = err.response.data.message || 'Le serveur a refusé l\'inscription';
       } else if (err.request) {
-        // The request was made but no response was received
-        errorMessage = 'Network Error: No response from server. Check your connection or API URL.';
+        errorMessage = 'Erreur réseau : Le serveur ne répond pas';
       } else {
-        // Something happened in setting up the request that triggered an Error
-        errorMessage = `Request Error: ${err.message}`;
+        errorMessage = err.message;
       }
       setError(errorMessage);
     } finally {
@@ -40,63 +36,109 @@ const [loading, setLoading] = useState(false)
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-green-700">Create Account</h2>
-        
-        {/* Debug info - user please remove after fixing */}
-        <div className="mb-4 p-2 bg-yellow-100 text-xs text-yellow-800 rounded">
-          <p>Debug Info:</p>
-          <p>API: {import.meta.env.VITE_API_URL || 'localhost'}</p>
+    <div className="min-h-screen flex items-center justify-center bg-[#f8fafc] relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-green-50 rounded-full blur-3xl opacity-50"></div>
+        <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-blue-50 rounded-full blur-3xl opacity-50"></div>
+      </div>
+
+      <div className="max-w-md w-full mx-4 relative z-10 py-10">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center p-3 bg-green-600 rounded-2xl shadow-xl shadow-green-100 mb-4">
+            <Leaf className="text-white" size={32} />
+          </div>
+          <h1 className="text-4xl font-black text-gray-900 tracking-tight">Espace Agricole</h1>
+          <p className="text-gray-500 font-medium mt-2">Rejoignez la communauté Agri-Gestion</p>
         </div>
 
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-            <strong className="font-bold">Error: </strong>
-            <span className="block sm:inline">{error}</span>
+        <div className="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-xl shadow-gray-200/50 border border-gray-100">
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-2xl text-sm font-bold flex items-center gap-3">
+              <div className="w-1.5 h-1.5 bg-red-600 rounded-full"></div>
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 ml-1">Nom Complet</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-green-600 transition-colors">
+                  <User size={18} />
+                </div>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl outline-none focus:bg-white focus:border-green-600 transition-all font-medium text-gray-700"
+                  placeholder="Jean Dupont"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 ml-1">Adresse Email</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-green-600 transition-colors">
+                  <Mail size={18} />
+                </div>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl outline-none focus:bg-white focus:border-green-600 transition-all font-medium text-gray-700"
+                  placeholder="jean.dupont@exemple.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 ml-1">Mot de Passe</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-green-600 transition-colors">
+                  <Lock size={18} />
+                </div>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl outline-none focus:bg-white focus:border-green-600 transition-all font-medium text-gray-700"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-green-600 text-white py-4 rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-green-100 hover:bg-green-700 hover:shadow-green-200/50 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="animate-spin" size={20} />
+                  Inscription...
+                </>
+              ) : (
+                <>
+                  <UserPlus size={20} />
+                  Créer mon Compte
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="mt-8 text-center">
+            <p className="text-gray-500 font-medium">
+              Déjà un compte ?{' '}
+              <Link to="/login" className="text-green-600 font-bold hover:underline underline-offset-4">
+                Se connecter
+              </Link>
+            </p>
           </div>
-        )}
-        <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              required
-            />
-          </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className={`w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            disabled={loading}
-          > 
-            {loading ? 'Registering...' : 'Register'}
-          </button>
-        </form>
-         <div className="mt-4 text-center">
-            <Link to="/login" className="text-sm text-green-600 hover:underline">Already have an account? Login</Link>
         </div>
       </div>
     </div>

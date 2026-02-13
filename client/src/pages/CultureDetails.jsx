@@ -118,135 +118,116 @@ const CultureDetails = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8">
-            <Link to={`/parcelle/${culture.parcelleId}`} className="flex items-center gap-2 text-green-700 font-medium mb-6 hover:underline">
-                <ArrowLeft size={18} /> Retour à la parcelle
+        <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+            <Link to={`/parcelle/${culture.parcelleId}`} className="inline-flex items-center gap-2 text-green-700 font-bold mb-6 hover:text-green-800 transition-colors group">
+                <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> 
+                <span className="text-sm">Retour à la parcelle</span>
             </Link>
 
-            <h1 className="text-3xl font-bold mb-8 text-gray-800">Suivi : {culture.type} ({new Date(culture.sowingDate).getFullYear()})</h1>
-
-            {/* Financial Summary */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-white p-6 rounded-lg shadow-sm border-t-4 border-red-500">
-                    <div className="flex justify-between items-start">
-                        <div>
-                            <p className="text-gray-500 text-sm font-medium">Coût de Production</p>
-                            <p className="text-2xl font-bold text-gray-800">{totalCharges.toLocaleString()} FCFA</p>
-                        </div>
-                        <TrendingDown className="text-red-500" />
+            <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm mb-8 border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative overflow-hidden">
+                <div className="relative z-10">
+                    <div className="flex items-center gap-3 mb-2">
+                        <span className="bg-green-50 text-green-700 text-[10px] font-black px-2 py-1 rounded-md uppercase tracking-widest border border-green-100">
+                            Culture Active
+                        </span>
                     </div>
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow-sm border-t-4 border-green-500">
-                    <div className="flex justify-between items-start">
-                        <div>
-                            <p className="text-gray-500 text-sm font-medium">Chiffre d'Affaires</p>
-                            <p className="text-2xl font-bold text-gray-800">{totalRevenus.toLocaleString()} FCFA</p>
-                        </div>
-                        <TrendingUp className="text-green-500" />
-                    </div>
-                </div>
-                <div className={`bg-white p-6 rounded-lg shadow-sm border-t-4 ${benefice >= 0 ? 'border-blue-500' : 'border-orange-500'}`}>
-                    <div className="flex justify-between items-start">
-                        <div>
-                            <p className="text-gray-500 text-sm font-medium">Bénéfice Net</p>
-                            <p className={`text-2xl font-bold ${benefice >= 0 ? 'text-blue-700' : 'text-orange-700'}`}>{benefice.toLocaleString()} FCFA</p>
-                        </div>
-                        <DollarSign className={benefice >= 0 ? 'text-blue-500' : 'text-orange-500'} />
-                    </div>
+                    <h1 className="text-3xl font-black text-gray-900 tracking-tight">Suivi : {culture.type}</h1>
+                    <p className="text-gray-500 font-medium flex items-center gap-2 mt-1">
+                        <Scale size={16} /> Semis le {new Date(culture.sowingDate).toLocaleDateString()}
+                    </p>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Visual Analysis */}
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                    <h3 className="text-lg font-bold mb-6">Comparaison Économique</h3>
-                    <div className="h-64">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={chartData}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <Tooltip />
-                                <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                                    {chartData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.color} />
-                                    ))}
-                                </Bar>
-                            </BarChart>
-                        </ResponsiveContainer>
+            {/* Financial Summary */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-red-500">
+                    <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Coût de Production</p>
+                    <p className="text-2xl font-black text-gray-800">{totalCharges.toLocaleString()} <span className="text-xs">FCFA</span></p>
+                </div>
+                <div className="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-green-500">
+                    <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Chiffre d'Affaires</p>
+                    <p className="text-2xl font-black text-gray-800">{totalRevenus.toLocaleString()} <span className="text-xs">FCFA</span></p>
+                </div>
+                <div className={`bg-white p-6 rounded-2xl shadow-sm border-l-4 ${benefice >= 0 ? 'border-blue-500' : 'border-amber-500'}`}>
+                    <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Bénéfice Net</p>
+                    <p className={`text-2xl font-black ${benefice >= 0 ? 'text-blue-600' : 'text-amber-600'}`}>{benefice.toLocaleString()} <span className="text-xs">FCFA</span></p>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
+                {/* Charges Section */}
+                <div className="bg-white p-4 md:p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <div className="flex justify-between items-center mb-8">
+                        <h2 className="text-xl font-black text-gray-900 flex items-center gap-3">
+                            <div className="p-2 bg-red-50 text-red-600 rounded-xl">
+                                <TrendingDown size={20} />
+                            </div>
+                            Dépenses
+                        </h2>
+                        <button onClick={() => setChargeModal(true)} className="p-2 bg-red-600 text-white rounded-xl shadow-lg shadow-red-100 hover:bg-red-700 transition-all"><Plus size={20} /></button>
+                    </div>
+
+                    <div className="space-y-3">
+                        {charges.map(c => (
+                            <div key={c.id} className="bg-gray-50 p-4 rounded-2xl border border-gray-100 flex justify-between items-center group">
+                                <div>
+                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">{new Date(c.date).toLocaleDateString()}</p>
+                                    <p className="font-bold text-gray-800">{c.type}</p>
+                                    <p className="text-red-600 font-black text-sm">{c.amount.toLocaleString()} FCFA</p>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button 
+                                        onClick={() => {
+                                            setEditCharge({ id: c.id, type: c.type, amount: c.amount, date: new Date(c.date).toISOString().split('T')[0] });
+                                            setIsEditChargeOpen(true);
+                                        }}
+                                        className="p-2 bg-white text-amber-500 rounded-lg border border-gray-100 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                                    >
+                                        <Pencil size={14} />
+                                    </button>
+                                    <button onClick={() => handleDeleteCharge(c.id)} className="p-2 bg-white text-red-500 rounded-lg border border-gray-100 shadow-sm"><Trash2 size={16}/></button>
+                                </div>
+                            </div>
+                        ))}
+                        {charges.length === 0 && <p className="text-center text-gray-400 py-8 font-medium">Aucune dépense enregistrée.</p>}
                     </div>
                 </div>
 
-                {/* Operations */}
-                <div className="space-y-6">
-                    {/* Charges Section */}
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="font-bold">Dépenses (Charges)</h3>
-                            <button onClick={() => setChargeModal(true)} className="p-1 bg-red-100 text-red-600 rounded hover:bg-red-200"><Plus size={20} /></button>
-                        </div>
-                        <div className="max-h-40 overflow-y-auto space-y-2">
-                            {charges.map(c => (
-                                <div key={c.id} className="flex justify-between items-center py-2 border-b last:border-0">
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-medium">{c.type}</span>
-                                        <span className="text-xs text-gray-400">{new Date(c.date).toLocaleDateString()}</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <span className="font-bold text-red-600">-{c.amount.toLocaleString()}</span>
-                                        <button 
-                                            onClick={() => {
-                                                setEditCharge({ id: c.id, type: c.type, amount: c.amount, date: new Date(c.date).toISOString().split('T')[0] });
-                                                setIsEditChargeOpen(true);
-                                            }}
-                                            className="text-gray-400 hover:text-amber-500 transition"
-                                            title="Modifier"
-                                        >
-                                            <Pencil size={14} />
-                                        </button>
-                                        <button onClick={() => handleDeleteCharge(c.id)} className="text-gray-400 hover:text-red-500 transition" title="Supprimer la dépense">
-                                            <Trash2 size={16}/>
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                            {charges.length === 0 && <p className="text-center text-gray-400 py-4 text-sm">Aucune dépense.</p>}
-                        </div>
+                {/* Recoltes Section */}
+                <div className="bg-white p-4 md:p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <div className="flex justify-between items-center mb-8">
+                        <h2 className="text-xl font-black text-gray-900 flex items-center gap-3">
+                            <div className="p-2 bg-green-50 text-green-600 rounded-xl">
+                                <TrendingUp size={20} />
+                            </div>
+                            Récoltes
+                        </h2>
+                        <button onClick={() => setRecolteModal(true)} className="p-2 bg-green-600 text-white rounded-xl shadow-lg shadow-green-100 hover:bg-green-700 transition-all"><Plus size={20} /></button>
                     </div>
 
-                    {/* Recoltes Section */}
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="font-bold">Récoltes & Ventes</h3>
-                            <button onClick={() => setRecolteModal(true)} className="p-1 bg-green-100 text-green-600 rounded hover:bg-green-200"><Plus size={20} /></button>
-                        </div>
-                        <div className="max-h-40 overflow-y-auto space-y-2">
-                            {recoltes.map(r => (
-                                <div key={r.id} className="flex justify-between items-center py-2 border-b last:border-0">
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-medium">{r.quantity} kg @ {r.price}</span>
-                                        <span className="text-xs text-gray-400">{new Date(r.date).toLocaleDateString()}</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <span className="font-bold text-green-600">+{ (r.quantity * r.price).toLocaleString() }</span>
-                                        <button 
-                                            onClick={() => {
-                                                setEditRecolte({ id: r.id, quantity: r.quantity, price: r.price, date: new Date(r.date).toISOString().split('T')[0] });
-                                                setIsEditRecolteOpen(true);
-                                            }}
-                                            className="text-gray-400 hover:text-amber-500 transition"
-                                            title="Modifier"
-                                        >
-                                            <Pencil size={14} />
-                                        </button>
-                                        <button onClick={() => handleDeleteRecolte(r.id)} className="text-gray-400 hover:text-red-500 transition" title="Supprimer la vente">
-                                            <Trash2 size={16}/>
-                                        </button>
-                                    </div>
+                    <div className="space-y-3">
+                        {recoltes.map(r => (
+                            <div key={r.id} className="bg-gray-50 p-4 rounded-2xl border border-gray-100 flex justify-between items-center group">
+                                <div>
+                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">{new Date(r.date).toLocaleDateString()}</p>
+                                    <p className="font-bold text-gray-800">{r.quantity} kg</p>
+                                    <p className="text-green-600 font-black text-sm">{(r.quantity * r.price).toLocaleString()} FCFA</p>
                                 </div>
-                            ))}
-                            {recoltes.length === 0 && <p className="text-center text-gray-400 py-4 text-sm">Aucune vente.</p>}
-                        </div>
+                                <div className="flex gap-2">
+                                    <button 
+                                        onClick={() => {
+                                            setEditRecolte({ id: r.id, quantity: r.quantity, price: r.price, date: new Date(r.date).toISOString().split('T')[0] });
+                                            setIsEditRecolteOpen(true);
+                                        }}
+                                        className="p-2 bg-white text-amber-500 rounded-lg border border-gray-100 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                                    >
+                                        <Pencil size={14} />
+                                    </button>
+                                    <button onClick={() => handleDeleteRecolte(r.id)} className="p-2 bg-white text-red-500 rounded-lg border border-gray-100 shadow-sm"><Trash2 size={16}/></button>
+                                </div>
+                            </div>
+                        ))}
+                        {recoltes.length === 0 && <p className="text-center text-gray-400 py-8 font-medium">Aucune récolte enregistrée.</p>}
                     </div>
                 </div>
             </div>

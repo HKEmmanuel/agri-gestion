@@ -192,20 +192,20 @@ const AdminDashboard = () => {
     if (loading) return <div className="flex justify-center p-24"><Loader2 className="animate-spin text-blue-600" size={50} /></div>;
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8">
+        <div className="min-h-screen bg-gray-50 p-4 md:p-8">
             <div className="max-w-7xl mx-auto">
-                <header className="flex justify-between items-center mb-10">
+                <header className="flex flex-col lg:flex-row justify-between lg:items-center gap-6 mb-10">
                     <div>
-                        <h1 className="text-4xl font-extrabold text-gray-900 flex items-center gap-4">
-                            <ShieldCheck size={40} className="text-blue-600" /> 
+                        <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 flex items-center gap-4">
+                            <ShieldCheck size={36} className="text-blue-600 flex-shrink-0" /> 
                             <span>Espace Visionnaire Admin</span>
                         </h1>
                         <p className="text-gray-500 font-medium mt-2">Pilotage global de la plateforme Agri-Gestion</p>
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex flex-col sm:flex-row gap-4">
                         <button 
                             onClick={exportToExcel}
-                            className="bg-white text-gray-700 border border-gray-200 px-6 py-3 rounded-2xl font-bold hover:bg-gray-50 transition-all flex items-center gap-2 group"
+                            className="bg-white text-gray-700 border border-gray-200 px-6 py-3.5 rounded-2xl font-bold hover:bg-gray-50 transition-all flex items-center justify-center gap-2 group shadow-sm active:scale-95"
                         >
                             <Download size={20} className="group-hover:-translate-y-1 transition-transform" /> Export Excel
                         </button>
@@ -214,7 +214,7 @@ const AdminDashboard = () => {
                                 setFormData({ name: '', email: '', password: '', role: 'exploitant' });
                                 setIsCreateModalOpen(true);
                             }}
-                            className="bg-blue-600 text-white px-6 py-3 rounded-2xl font-bold shadow-xl shadow-blue-100 hover:bg-blue-700 transition-all flex items-center gap-2 group"
+                            className="bg-blue-600 text-white px-6 py-3.5 rounded-2xl font-bold shadow-xl shadow-blue-100 hover:bg-blue-700 transition-all flex items-center justify-center gap-2 group active:scale-95"
                         >
                             <Plus className="group-hover:rotate-90 transition-transform" /> Nouvel Utilisateur
                         </button>
@@ -222,57 +222,57 @@ const AdminDashboard = () => {
                 </header>
 
                 {/* Filters Section */}
-                <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 mb-8 flex flex-wrap items-end gap-6">
-                    <div className="flex-1 min-w-[200px]">
+                <div className="bg-white p-4 md:p-6 rounded-3xl shadow-sm border border-gray-100 mb-8 grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-end gap-6">
+                    <div className="lg:flex-1">
                         <label className="flex items-center gap-2 text-xs font-black text-gray-400 uppercase mb-2 tracking-widest">
                             <MapPin size={14} /> Région / Localisation
                         </label>
                         <select 
-                            className="w-full bg-gray-50 p-3 rounded-xl outline-none font-bold text-gray-700 border-2 border-transparent focus:border-blue-500 transition-all"
+                            className="w-full bg-gray-50 p-3.5 rounded-2xl outline-none font-bold text-gray-700 border-2 border-transparent focus:border-blue-500 transition-all appearance-none"
                             value={filters.region}
                             onChange={e => setFilters({...filters, region: e.target.value})}
                         >
                             {regions.map(r => <option key={r} value={r}>{r}</option>)}
                         </select>
                     </div>
-                    <div className="flex-1 min-w-[150px]">
+                    <div>
                         <label className="flex items-center gap-2 text-xs font-black text-gray-400 uppercase mb-2 tracking-widest">
                             <CalendarIcon size={14} /> Depuis le
                         </label>
                         <input 
                             type="date"
-                            className="w-full bg-gray-50 p-3 rounded-xl outline-none font-bold text-gray-700 border-2 border-transparent focus:border-blue-500 transition-all"
+                            className="w-full bg-gray-50 p-3.5 rounded-2xl outline-none font-bold text-gray-700 border-2 border-transparent focus:border-blue-500 transition-all font-mono"
                             value={filters.start}
                             onChange={e => setFilters({...filters, start: e.target.value})}
                         />
                     </div>
-                    <div className="flex-1 min-w-[150px]">
+                    <div>
                         <label className="flex items-center gap-2 text-xs font-black text-gray-400 uppercase mb-2 tracking-widest">
                             <CalendarIcon size={14} /> Jusqu'au
                         </label>
                         <input 
                             type="date"
-                            className="w-full bg-gray-50 p-3 rounded-xl outline-none font-bold text-gray-700 border-2 border-transparent focus:border-blue-500 transition-all"
+                            className="w-full bg-gray-50 p-3.5 rounded-2xl outline-none font-bold text-gray-700 border-2 border-transparent focus:border-blue-500 transition-all font-mono"
                             value={filters.end}
                             onChange={e => setFilters({...filters, end: e.target.value})}
                         />
                     </div>
                     <button 
                         onClick={() => setFilters({ region: 'Toutes', start: '', end: '' })}
-                        className="px-6 py-3 text-sm font-bold text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
+                        className="w-full lg:w-auto px-6 py-3.5 text-sm font-black uppercase tracking-widest text-blue-600 hover:bg-blue-50 rounded-2xl transition-all border-2 border-transparent"
                     >
                         Réinitialiser
                     </button>
                 </div>
 
                 {/* Global Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12">
                     <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
                         <div className="flex items-center gap-4">
                             <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl"><Users size={28} /></div>
                             <div>
-                                <p className="text-sm font-bold text-gray-400 uppercase">Utilisateurs</p>
-                                <p className="text-3xl font-black text-gray-800">{stats.totalUsers}</p>
+                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Utilisateurs</p>
+                                <p className="text-3xl font-black text-gray-800 tracking-tight">{stats.totalUsers}</p>
                             </div>
                         </div>
                     </div>
@@ -280,8 +280,8 @@ const AdminDashboard = () => {
                         <div className="flex items-center gap-4 relative z-10">
                             <div className="p-3 bg-green-50 text-green-600 rounded-2xl"><Briefcase size={28} /></div>
                             <div>
-                                <p className="text-sm font-bold text-gray-400 uppercase truncate">Exploitations</p>
-                                <p className="text-3xl font-black text-gray-800">{stats.totalExploitations}</p>
+                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest truncate">Exploitations</p>
+                                <p className="text-3xl font-black text-gray-800 tracking-tight">{stats.totalExploitations}</p>
                             </div>
                         </div>
                         {filters.region !== 'Toutes' && (
@@ -292,8 +292,8 @@ const AdminDashboard = () => {
                         <div className="flex items-center gap-4">
                             <div className="p-3 bg-emerald-50 text-emerald-600 rounded-2xl"><TrendingUp size={28} /></div>
                             <div>
-                                <p className="text-sm font-bold text-gray-400 uppercase">Revenu Global</p>
-                                <p className="text-2xl font-black text-emerald-700">{stats.totalRevenues.toLocaleString()} CFA</p>
+                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Revenu Global</p>
+                                <p className="text-2xl font-black text-emerald-700 tracking-tight">{stats.totalRevenues.toLocaleString()} <span className="text-sm">CFA</span></p>
                             </div>
                         </div>
                     </div>
@@ -301,8 +301,8 @@ const AdminDashboard = () => {
                         <div className="flex items-center gap-4">
                             <div className="p-3 bg-red-50 text-red-600 rounded-2xl"><TrendingDown size={28} /></div>
                             <div>
-                                <p className="text-sm font-bold text-gray-400 uppercase">Charges Globales</p>
-                                <p className="text-2xl font-black text-red-700">{stats.totalCharges.toLocaleString()} CFA</p>
+                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Charges Globales</p>
+                                <p className="text-2xl font-black text-red-700 tracking-tight">{stats.totalCharges.toLocaleString()} <span className="text-sm">CFA</span></p>
                             </div>
                         </div>
                     </div>
@@ -310,13 +310,15 @@ const AdminDashboard = () => {
 
                 {error && <div className="bg-red-50 text-red-700 p-4 rounded-xl border border-red-100 mb-8 font-bold">{error}</div>}
 
-                {/* Users Table */}
+                {/* Users Management Section */}
                 <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="p-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
+                    <div className="p-6 border-b border-gray-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gray-50/50">
                         <h2 className="text-xl font-bold text-gray-800">Gestion des Comptes</h2>
-                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{users.length} Comptes actifs</span>
+                        <span className="text-xs font-black text-gray-400 uppercase tracking-widest bg-white px-3 py-1.5 rounded-full border border-gray-100">{users.length} Comptes actifs</span>
                     </div>
-                    <div className="overflow-x-auto">
+
+                    {/* Desktop View Table */}
+                    <div className="hidden lg:block overflow-x-auto">
                         <table className="min-w-full">
                             <thead className="bg-gray-50 text-gray-400 text-[10px] uppercase font-black tracking-widest">
                                 <tr>
@@ -328,10 +330,10 @@ const AdminDashboard = () => {
                             </thead>
                             <tbody className="divide-y divide-gray-50">
                                 {users.map(u => (
-                                    <tr key={u.id} className="hover:bg-gray-50/50 transition-colors">
+                                    <tr key={u.id} className="hover:bg-gray-50/50 transition-colors group">
                                         <td className="px-8 py-5">
                                             <div className="flex items-center gap-4">
-                                                <div className={`p-2 rounded-xl ${u.role === 'admin' ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600'}`}>
+                                                <div className={`p-2.5 rounded-xl ${u.role === 'admin' ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600'}`}>
                                                     <UserIcon size={20} />
                                                 </div>
                                                 <span className="font-bold text-gray-700">{u.name}</span>
@@ -339,17 +341,17 @@ const AdminDashboard = () => {
                                         </td>
                                         <td className="px-8 py-5 text-gray-500 font-medium">{u.email}</td>
                                         <td className="px-8 py-5">
-                                            <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase ${
-                                                u.role === 'admin' ? 'bg-purple-50 text-purple-700 border border-purple-100' : 'bg-blue-50 text-blue-700 border border-blue-100'
+                                            <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase border ${
+                                                u.role === 'admin' ? 'bg-purple-50 text-purple-700 border-purple-100' : 'bg-blue-50 text-blue-700 border-blue-100'
                                             }`}>
                                                 {u.role}
                                             </span>
                                         </td>
                                         <td className="px-8 py-5">
-                                            <div className="flex justify-center gap-4">
+                                            <div className="flex justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <button 
                                                     onClick={() => openEditModal(u)}
-                                                    className="p-2 text-amber-500 hover:bg-amber-50 rounded-xl transition-colors"
+                                                    className="p-2.5 text-amber-500 hover:bg-amber-50 rounded-xl transition-colors"
                                                     title="Modifier"
                                                 >
                                                     <Pencil size={18} />
@@ -357,7 +359,7 @@ const AdminDashboard = () => {
                                                 <button 
                                                     onClick={() => handleDeleteUser(u.id)}
                                                     disabled={u.id === currentUser.id}
-                                                    className={`p-2 rounded-xl transition-colors ${u.id === currentUser.id ? 'text-gray-200 cursor-not-allowed' : 'text-red-500 hover:bg-red-50'}`}
+                                                    className={`p-2.5 rounded-xl transition-colors ${u.id === currentUser.id ? 'text-gray-200 cursor-not-allowed' : 'text-red-500 hover:bg-red-50'}`}
                                                     title="Supprimer"
                                                 >
                                                     <Trash2 size={18} />
@@ -368,6 +370,49 @@ const AdminDashboard = () => {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+
+                    {/* Mobile View Cards */}
+                    <div className="lg:hidden divide-y divide-gray-50">
+                        {users.map(u => (
+                            <div key={u.id} className="p-6 flex flex-col gap-4">
+                                <div className="flex justify-between items-start">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`p-2.5 rounded-2xl ${u.role === 'admin' ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600'}`}>
+                                            <UserIcon size={22} />
+                                        </div>
+                                        <div>
+                                            <p className="font-black text-gray-800 text-lg leading-tight">{u.name}</p>
+                                            <p className="text-gray-500 text-sm font-medium">{u.email}</p>
+                                        </div>
+                                    </div>
+                                    <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black tracking-widest uppercase border ${
+                                        u.role === 'admin' ? 'bg-purple-50 text-purple-700 border-purple-100' : 'bg-blue-50 text-blue-700 border-blue-100'
+                                    }`}>
+                                        {u.role}
+                                    </span>
+                                </div>
+                                <div className="flex gap-3 pt-2">
+                                    <button 
+                                        onClick={() => openEditModal(u)}
+                                        className="flex-1 flex justify-center items-center gap-2 py-3 bg-amber-50 text-amber-600 rounded-2xl font-bold transition-all text-sm"
+                                    >
+                                        <Pencil size={18} /> Modifier
+                                    </button>
+                                    <button 
+                                        onClick={() => handleDeleteUser(u.id)}
+                                        disabled={u.id === currentUser.id}
+                                        className={`flex-1 flex justify-center items-center gap-2 py-3 rounded-2xl font-bold transition-all text-sm ${
+                                            u.id === currentUser.id 
+                                            ? 'bg-gray-100 text-gray-300 cursor-not-allowed' 
+                                            : 'bg-red-50 text-red-600 active:bg-red-100'
+                                        }`}
+                                    >
+                                        <Trash2 size={18} /> Supprimer
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

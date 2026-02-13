@@ -277,135 +277,212 @@ const Dashboard = () => {
         </div>
       </header>
 
-      <main className="flex-grow p-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-           <div className="bg-white p-6 rounded-lg shadow border-l-4 border-green-500">
-             <h3 className="text-gray-500 text-sm font-medium">Total Exploitations</h3>
-             <p className="text-3xl font-bold text-gray-800">{exploitations.length}</p>
+      <main className="flex-grow p-4 md:p-8">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
+           <div className="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-green-500 hover:shadow-md transition-shadow">
+             <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Total Exploitations</h3>
+             <p className="text-3xl font-black text-gray-800 tracking-tight">{exploitations.length}</p>
            </div>
-           <div className="bg-white p-6 rounded-lg shadow border-l-4 border-blue-500">
-             <h3 className="text-gray-500 text-sm font-medium">Parcelles Totales</h3>
-             <p className="text-3xl font-bold text-gray-800">
+           <div className="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-blue-500 hover:shadow-md transition-shadow">
+             <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Parcelles Totales</h3>
+             <p className="text-3xl font-black text-gray-800 tracking-tight">
                 {exploitations.reduce((acc, exp) => acc + (exp.parcelles?.length || 0), 0)}
              </p>
            </div>
-           <div className="bg-white p-6 rounded-lg shadow border-l-4 border-amber-500">
-             <h3 className="text-gray-500 text-sm font-medium">Balance Totale</h3>
-             <p className={`text-3xl font-bold ${chartData.reduce((acc, d) => acc + (d.revenus - d.charges), 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+           <div className="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-amber-500 hover:shadow-md transition-shadow">
+             <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Balance Totale</h3>
+             <p className={`text-3xl font-black tracking-tight ${chartData.reduce((acc, d) => acc + (d.revenus - d.charges), 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 {chartData.reduce((acc, d) => acc + (d.revenus - d.charges), 0).toLocaleString()} <span className="text-sm">FCFA</span>
              </p>
            </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow mb-8">
-            <div className="flex justify-between items-center mb-8">
+        {/* Main Content Area */}
+        <div className="bg-white p-4 md:p-8 rounded-3xl shadow-sm mb-8 border border-gray-100">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-800">
-                        Tableau de Bord {user.role === 'admin' && <span className="ml-2 text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-full uppercase tracking-widest font-bold">Vue Globale Admin</span>}
+                    <h1 className="text-2xl md:text-3xl font-black text-gray-900 leading-tight">
+                        Tableau de Bord {user.role === 'admin' && <span className="block md:inline-block mt-2 md:mt-0 md:ml-3 text-[10px] bg-blue-100 text-blue-700 px-3 py-1 rounded-full uppercase tracking-widest font-black">Vue Globale Admin</span>}
                     </h1>
-                    <p className="text-gray-500 mt-1">
+                    <p className="text-gray-500 mt-2 font-medium">
                         {user.role === 'admin' 
                             ? "Suivi des performances de tous les exploitants" 
                             : `Bienvenue, ${user.name}. Voici un résumé de vos activités.`}
                     </p>
                 </div>
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row w-full md:w-auto gap-3">
                     {user.role !== 'admin' && (
                         <button 
                             onClick={() => setIsModalOpen(true)}
-                            className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-green-700 transition-all hover:-translate-y-1"
+                            className="flex items-center justify-center gap-2 bg-green-600 text-white px-6 py-3.5 rounded-xl font-bold shadow-lg shadow-green-100 hover:bg-green-700 transition-all hover:-translate-y-1 active:scale-95"
                         >
-                            <Plus size={20} /> Nouvelle Exploitation
+                            <Plus size={20} /> <span className="whitespace-nowrap">Nouvelle Exploitation</span>
                         </button>
                     )}
                     <button 
                         onClick={generatePDF}
-                        className="flex items-center gap-2 bg-white text-gray-700 border border-gray-200 px-6 py-3 rounded-xl font-bold shadow-sm hover:bg-gray-50 transition-all"
+                        className="flex items-center justify-center gap-2 bg-white text-gray-700 border border-gray-200 px-6 py-3.5 rounded-xl font-bold shadow-sm hover:bg-gray-50 transition-all active:scale-95"
                     >
-                        <Download size={20} /> {user.role === 'admin' ? 'Rapport Global' : 'Télécharger Rapport'}
+                        <Download size={20} /> <span className="whitespace-nowrap">{user.role === 'admin' ? 'Rapport Global' : 'Télécharger Rapport'}</span>
                     </button>
                 </div>
             </div>
             
             {exploitations.length === 0 ? (
-                <div className="text-center py-10 text-gray-500">
-                    Aucune exploitation trouvée. Commencez par en créer une.
+                <div className="text-center py-20 text-gray-400 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+                    <p className="font-bold text-lg">Aucune exploitation trouvée.</p>
+                    <p className="text-sm mt-1">Commencez par en créer une pour voir vos statistiques.</p>
                 </div>
             ) : (
-                <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Localisation</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                            {exploitations.map((exp) => (
-                                <tr key={exp.id}>
-                                    <td className="px-6 py-4 whitespace-nowrap font-medium">{exp.name}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{exp.location}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap flex gap-3">
-                                        <Link to={`/exploitation/${exp.id}`} className="text-blue-600 hover:text-blue-800 transition font-bold flex items-center gap-1">
-                                            Gérer
-                                        </Link>
-                                        <button 
-                                            onClick={() => {
-                                                setEditExp({ id: exp.id, name: exp.name, location: exp.location });
-                                                setIsEditOpen(true);
-                                            }}
-                                            className="text-amber-600 hover:text-amber-800 transition flex items-center gap-1"
-                                            title="Modifier"
-                                        >
-                                            <Pencil size={18} />
-                                        </button>
-                                        <button 
-                                            onClick={() => handleDelete(exp.id)}
-                                            className="text-red-600 hover:text-red-800 transition flex items-center gap-1"
-                                            title="Supprimer"
-                                        >
-                                            <Trash2 size={18} />
-                                        </button>
-                                    </td>
+                <>
+                    {/* Desktop View Table */}
+                    <div className="hidden md:block overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-100">
+                            <thead>
+                                <tr className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+                                    <th className="px-6 py-4 text-left">Nom de l'exploitation</th>
+                                    <th className="px-6 py-4 text-left">Localisation</th>
+                                    <th className="px-6 py-4 text-right">Actions</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody className="divide-y divide-gray-50">
+                                {exploitations.map((exp) => (
+                                    <tr key={exp.id} className="hover:bg-gray-50/50 transition-colors group">
+                                        <td className="px-6 py-5 whitespace-nowrap font-bold text-gray-800">{exp.name}</td>
+                                        <td className="px-6 py-5 whitespace-nowrap text-gray-500 font-medium">{exp.location}</td>
+                                        <td className="px-6 py-5 whitespace-nowrap">
+                                            <div className="flex justify-end items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <Link to={`/exploitation/${exp.id}`} className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold hover:bg-blue-100 transition">
+                                                    Gérer
+                                                </Link>
+                                                <button 
+                                                    onClick={() => {
+                                                        setEditExp({ id: exp.id, name: exp.name, location: exp.location });
+                                                        setIsEditOpen(true);
+                                                    }}
+                                                    className="p-1.5 text-amber-500 hover:bg-amber-50 rounded-lg transition"
+                                                >
+                                                    <Pencil size={18} />
+                                                </button>
+                                                <button 
+                                                    onClick={() => handleDelete(exp.id)}
+                                                    className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Mobile View Cards */}
+                    <div className="md:hidden space-y-4">
+                        {exploitations.map((exp) => (
+                            <div key={exp.id} className="bg-gray-50 p-5 rounded-2xl border border-gray-100 flex flex-col gap-4">
+                                <div>
+                                    <h3 className="font-black text-gray-900 text-lg">{exp.name}</h3>
+                                    <p className="text-gray-500 text-sm font-medium flex items-center gap-1 mt-1">
+                                        {exp.location}
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-2 pt-2 border-t border-gray-200/50">
+                                    <Link to={`/exploitation/${exp.id}`} className="flex-grow text-center py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold shadow-md shadow-blue-100">
+                                        Gérer
+                                    </Link>
+                                    <button 
+                                        onClick={() => {
+                                            setEditExp({ id: exp.id, name: exp.name, location: exp.location });
+                                            setIsEditOpen(true);
+                                        }}
+                                        className="p-2.5 bg-amber-50 text-amber-600 rounded-xl"
+                                    >
+                                        <Pencil size={20} />
+                                    </button>
+                                    <button 
+                                        onClick={() => handleDelete(exp.id)}
+                                        className="p-2.5 bg-red-50 text-red-600 rounded-xl"
+                                    >
+                                        <Trash2 size={20} />
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </>
             )}
         </div>
 
+        {/* Economic Chart Area */}
+        <div className="bg-white p-4 md:p-8 rounded-3xl shadow-sm border border-gray-100">
+            <div className="flex items-center gap-3 mb-8">
+                <div className="p-2 bg-green-50 text-green-600 rounded-xl">
+                    <TrendingUp size={22} />
+                </div>
+                <h3 className="text-xl font-black text-gray-900 tracking-tight">Analyse Économique Globale</h3>
+            </div>
+            <div id="economic-chart" className="h-[350px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                        <XAxis 
+                            dataKey="name" 
+                            axisLine={false} 
+                            tickLine={false} 
+                            tick={{ fontSize: 10, fontWeight: 700, fill: '#9ca3af' }}
+                            dy={10}
+                        />
+                        <YAxis 
+                            axisLine={false} 
+                            tickLine={false}
+                            tick={{ fontSize: 10, fontWeight: 700, fill: '#9ca3af' }}
+                        />
+                        <Tooltip 
+                            cursor={{ fill: '#f9fafb' }}
+                            contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
+                        />
+                        <Legend wrapperStyle={{ paddingTop: '20px', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }} />
+                        <Bar dataKey="revenus" name="Revenus" fill="#16a34a" radius={[6, 6, 0, 0]} barSize={24} />
+                        <Bar dataKey="charges" name="Charges" fill="#dc2626" radius={[6, 6, 0, 0]} barSize={24} />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
+        </div>
+
+        {/* Modals */}
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 transition-opacity">
-            <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-2xl transform transition-all scale-100">
-              <h3 className="text-xl font-bold mb-4 text-green-700">Nouvelle Exploitation</h3>
-              <form onSubmit={handleCreate}>
-                <div className="mb-4">
-                  <label className="block text-sm font-semibold text-gray-600 mb-1">Nom de l'exploitation</label>
+          <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
+            <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
+              <h3 className="text-2xl font-black mb-6 text-green-700 tracking-tight">Nouvelle Exploitation</h3>
+              <form onSubmit={handleCreate} className="space-y-5">
+                <div>
+                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Nom de l'exploitation</label>
                   <input 
                     type="text" 
-                    className="w-full border-2 border-gray-100 rounded-lg p-3 focus:border-green-500 outline-none transition" 
+                    className="w-full bg-gray-50 border-2 border-transparent focus:border-green-500 focus:bg-white rounded-2xl p-4 outline-none transition-all font-medium" 
                     placeholder="Ex: Ferme du Nord"
                     value={newExp.name}
                     onChange={e => setNewExp({...newExp, name: e.target.value})}
                     required
                   />
                 </div>
-                <div className="mb-6">
-                  <label className="block text-sm font-semibold text-gray-600 mb-1">Localisation</label>
+                <div>
+                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Localisation</label>
                   <input 
                     type="text" 
-                    className="w-full border-2 border-gray-100 rounded-lg p-3 focus:border-green-500 outline-none transition" 
+                    className="w-full bg-gray-50 border-2 border-transparent focus:border-green-500 focus:bg-white rounded-2xl p-4 outline-none transition-all font-medium" 
                     placeholder="Ex: Korhogo, Côte d'Ivoire"
                     value={newExp.location}
                     onChange={e => setNewExp({...newExp, location: e.target.value})}
                     required
                   />
                 </div>
-                <div className="flex justify-end gap-3">
-                  <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-2 text-gray-500 font-medium hover:bg-gray-50 rounded-lg transition">Annuler</button>
-                  <button type="submit" className="px-6 py-2 bg-green-600 text-white rounded-lg font-bold shadow-md hover:bg-green-700 transition">Créer</button>
+                <div className="flex justify-end gap-3 pt-4">
+                  <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-3 text-gray-500 font-bold hover:bg-gray-50 rounded-xl transition">Annuler</button>
+                  <button type="submit" className="px-8 py-3 bg-green-600 text-white rounded-xl font-black uppercase tracking-wider shadow-lg shadow-green-100 hover:bg-green-700 transition">Créer</button>
                 </div>
               </form>
             </div>
@@ -413,60 +490,42 @@ const Dashboard = () => {
         )}
 
         {isEditOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-2xl">
-              <h3 className="text-xl font-bold mb-4 text-amber-600">Modifier l'Exploitation</h3>
-              <form onSubmit={handleUpdate}>
-                <div className="mb-4">
-                  <label className="block text-sm font-semibold text-gray-600 mb-1">Nom de l'exploitation</label>
+          <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
+            <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
+              <h3 className="text-2xl font-black mb-6 text-amber-600 tracking-tight">Modifier l'Exploitation</h3>
+              <form onSubmit={handleUpdate} className="space-y-5">
+                <div>
+                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Nom de l'exploitation</label>
                   <input 
                     type="text" 
-                    className="w-full border-2 border-gray-100 rounded-lg p-3 focus:border-amber-500 outline-none transition" 
+                    className="w-full bg-gray-50 border-2 border-transparent focus:border-amber-500 focus:bg-white rounded-2xl p-4 outline-none transition-all font-medium" 
                     value={editExp.name}
                     onChange={e => setEditExp({...editExp, name: e.target.value})}
                     required
                   />
                 </div>
-                <div className="mb-6">
-                  <label className="block text-sm font-semibold text-gray-600 mb-1">Localisation</label>
+                <div>
+                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Localisation</label>
                   <input 
                     type="text" 
-                    className="w-full border-2 border-gray-100 rounded-lg p-3 focus:border-amber-500 outline-none transition" 
+                    className="w-full bg-gray-50 border-2 border-transparent focus:border-amber-500 focus:bg-white rounded-2xl p-4 outline-none transition-all font-medium" 
                     value={editExp.location}
                     onChange={e => setEditExp({...editExp, location: e.target.value})}
                     required
                   />
                 </div>
-                <div className="flex justify-end gap-3">
-                  <button type="button" onClick={() => setIsEditOpen(false)} className="px-6 py-2 text-gray-500 font-medium hover:bg-gray-50 rounded-lg transition">Annuler</button>
-                  <button type="submit" className="px-6 py-2 bg-amber-600 text-white rounded-lg font-bold shadow-md hover:bg-amber-700 transition">Sauvegarder</button>
+                <div className="flex justify-end gap-3 pt-4">
+                  <button type="button" onClick={() => setIsEditOpen(false)} className="px-6 py-3 text-gray-500 font-bold hover:bg-gray-50 rounded-xl transition">Annuler</button>
+                  <button type="submit" className="px-8 py-3 bg-amber-600 text-white rounded-xl font-black uppercase tracking-wider shadow-lg shadow-amber-100 hover:bg-amber-700 transition">Sauvegarder</button>
                 </div>
               </form>
             </div>
           </div>
         )}
-
-        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-semibold mb-6">Performance Économique par Exploitation</h3>
-                <div id="economic-chart" className="h-80 box-border p-2 bg-white">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={chartData}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="revenus" name="Revenus (FCFA)" fill="#16a34a" radius={[4, 4, 0, 0]} />
-                            <Bar dataKey="charges" name="Charges (FCFA)" fill="#dc2626" radius={[4, 4, 0, 0]} />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </div>
-            </div>
-        </div>
       </main>
     </div>
   );
 };
+
 
 export default Dashboard;

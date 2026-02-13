@@ -47,61 +47,78 @@ const Profile = () => {
     if (loading) return <div className="p-8 text-center text-green-700">Chargement du profil...</div>;
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8">
-            <Link to="/" className="flex items-center gap-2 text-green-700 font-medium mb-6 hover:underline">
-                <ArrowLeft size={18} /> Retour au tableau de bord
+        <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+            <Link to="/" className="inline-flex items-center gap-2 text-green-700 font-bold mb-6 hover:text-green-800 transition-colors group">
+                <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> 
+                <span className="text-sm">Retour au tableau de bord</span>
             </Link>
 
-            <div className="max-w-2xl mx-auto">
-                <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                    <div className="bg-green-700 p-8 text-white">
-                        <div className="flex items-center gap-4">
-                            <div className="bg-white/20 p-4 rounded-full">
-                                <User size={48} />
+            <div className="max-w-xl mx-auto">
+                <div className="bg-white rounded-[2.5rem] shadow-xl shadow-gray-200/50 overflow-hidden border border-gray-100">
+                    <div className="bg-green-700 p-8 md:p-12 text-white relative overflow-hidden">
+                        {/* Decorative background circle */}
+                        <div className="absolute top-[-20%] right-[-10%] w-48 h-48 bg-white/10 rounded-full blur-2xl"></div>
+                        
+                        <div className="flex flex-col md:flex-row items-center gap-6 relative z-10 text-center md:text-left">
+                            <div className="bg-white/20 p-5 rounded-[2rem] backdrop-blur-md border border-white/30">
+                                <User size={56} className="text-white" />
                             </div>
                             <div>
-                                <h1 className="text-3xl font-bold">{formData.name}</h1>
-                                <p className="opacity-80 flex items-center gap-2">
-                                    <Shield size={16} /> Compte {user.role}
+                                <h1 className="text-3xl font-black tracking-tight">{formData.name}</h1>
+                                <p className="opacity-90 flex items-center justify-center md:justify-start gap-2 font-medium mt-1">
+                                    <Shield size={16} /> Compte {user.role === 'admin' ? 'Administrateur' : 'Exploitant'}
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="p-8 space-y-6">
+                    <form onSubmit={handleSubmit} className="p-8 md:p-12 space-y-8">
                         {message.text && (
-                            <div className={`p-4 rounded-lg text-sm font-medium ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                            <div className={`p-4 rounded-2xl text-sm font-bold flex items-center gap-3 ${message.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'}`}>
+                                <div className={`w-1.5 h-1.5 rounded-full ${message.type === 'success' ? 'bg-green-600' : 'bg-red-600'}`}></div>
                                 {message.text}
                             </div>
                         )}
 
-                        <div className="space-y-4">
+                        <div className="space-y-6">
                             <div>
-                                <label className="block text-sm font-semibold text-gray-600 mb-1 flex items-center gap-2">
-                                    <User size={16} /> Nom Complet
+                                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3 ml-1">
+                                    Nom Complet
                                 </label>
-                                <input 
-                                    type="text" 
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    className="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-green-500 outline-none transition"
-                                    required
-                                />
+                                <div className="relative group">
+                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-green-600 transition-colors">
+                                        <User size={18} />
+                                    </div>
+                                    <input 
+                                        type="text" 
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        className="w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl outline-none focus:bg-white focus:border-green-600 transition-all font-medium text-gray-700 shadow-sm"
+                                        placeholder="Votre nom"
+                                        required
+                                    />
+                                </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-gray-600 mb-1 flex items-center gap-2">
-                                    <Mail size={16} /> Adresse Email
+                                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3 ml-1">
+                                    Adresse Email
                                 </label>
-                                <input 
-                                    type="email" 
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    className="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-green-500 outline-none transition"
-                                    required
-                                />
+                                <div className="relative group">
+                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-green-600 transition-colors">
+                                        <Mail size={18} />
+                                    </div>
+                                    <input 
+                                        type="email" 
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        className="w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl outline-none focus:bg-white focus:border-green-600 transition-all font-medium text-gray-700 shadow-sm"
+                                        placeholder="votre@email.com"
+                                        required
+                                    />
+                                </div>
                             </div>
                         </div>
 
@@ -109,10 +126,19 @@ const Profile = () => {
                             <button 
                                 type="submit" 
                                 disabled={saving}
-                                className="w-full bg-green-700 text-white rounded-xl py-4 font-bold shadow-lg hover:bg-green-800 transition flex items-center justify-center gap-2 disabled:bg-gray-400"
+                                className="w-full bg-green-700 text-white rounded-2xl py-5 font-black uppercase tracking-widest shadow-lg shadow-green-100 hover:bg-green-800 hover:shadow-green-200/50 transition-all flex items-center justify-center gap-3 disabled:bg-gray-200 disabled:shadow-none active:scale-[0.98]"
                             >
-                                <Save size={20} />
-                                {saving ? 'Enregistrement...' : 'Sauvegarder les modifications'}
+                                {saving ? (
+                                    <>
+                                        <Loader2 className="animate-spin" size={20} />
+                                        Mise à jour...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Save size={20} />
+                                        Sauvegarder les Changements
+                                    </>
+                                )}
                             </button>
                         </div>
                     </form>
