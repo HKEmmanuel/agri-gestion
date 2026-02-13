@@ -4,7 +4,7 @@
   "main": "src/app.js",
   "scripts": {
     "build": "npx prisma generate --schema=./prisma/schema.prisma",
-    "start": "npx prisma migrate deploy --schema=./prisma/schema.prisma && node src/server.js",
+    "start": "npx prisma db push --schema=./prisma/schema.prisma --accept-data-loss && node src/server.js",
     "dev": "nodemon src/server.js"
   },
   "dependencies": {
