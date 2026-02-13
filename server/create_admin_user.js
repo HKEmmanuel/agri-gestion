@@ -4,13 +4,7 @@ const bcrypt = require('bcryptjs');
 
 console.log('DATABASE_URL:', process.env.DATABASE_URL);
 
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: "postgresql://agri_user:P1fi6nrUxkZaKTHWHY4NH7kAGmSxrnf6@dpg-d66et7bnv86c738pvbtg-a/agri_gestion",
-    },
-  },
-});
+const prisma = new PrismaClient();
 
 async function createAdmin() {
   try {
