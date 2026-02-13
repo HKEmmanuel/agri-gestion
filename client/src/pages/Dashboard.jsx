@@ -262,22 +262,8 @@ const Dashboard = () => {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="bg-green-700 text-white p-4 shadow-lg hidden md:flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Agri-Gestion Dashboard</h1>
-        <div className="flex items-center gap-3">
-          {user?.role === 'admin' && (
-            <Link to="/admin" className="bg-blue-600/20 text-white border border-blue-400/30 px-4 py-2 rounded-lg hover:bg-blue-600/40 transition flex items-center gap-2 backdrop-blur-sm">
-              <ShieldCheck size={18} /> Admin
-            </Link>
-          )}
-          <div className="h-8 w-[1px] bg-white/20 mx-2"></div>
-          <span className="text-sm font-medium opacity-90">Session : {user?.name}</span>
-        </div>
-      </header>
-
-      <main className="flex-grow p-4 md:p-8">
+    return (
+    <div className="min-h-screen bg-transparent flex flex-col">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
            <div className="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-green-500 hover:shadow-md transition-shadow">
@@ -522,7 +508,6 @@ const Dashboard = () => {
             </div>
           </div>
         )}
-      </main>
     </div>
   );
 };
