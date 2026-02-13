@@ -16,14 +16,15 @@ const initAdmin = async () => {
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
     if (user) {
-      // Si l'utilisateur existe déjà, on s'assure qu'il est admin
-      if (user.role !== 'admin') {
-        await prisma.user.update({
-          where: { email: adminEmail },
-          data: { role: 'admin' }
-        });
-        console.log(`Rôle admin forcé pour : ${adminEmail}`);
-      }
+      // On s'assure que l'utilisateur est admin ET que son mot de passe est réinitialisé par sécurité
+      await prisma.user.update({
+        where: { email: adminEmail },
+        data: { 
+          role: 'admin',
+          password: hashedPassword 
+        }
+      });
+      console.log(`Compte admin synchronisé : ${adminEmail}`);
     } else {
       // S'il n'existe pas, on le crée
       await prisma.user.create({
