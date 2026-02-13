@@ -264,7 +264,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="bg-green-700 text-white p-4 shadow-lg flex justify-between items-center">
+      <header className="bg-green-700 text-white p-4 shadow-lg hidden md:flex justify-between items-center">
         <h1 className="text-2xl font-bold">Agri-Gestion Dashboard</h1>
         <div className="flex items-center gap-3">
           {user?.role === 'admin' && (

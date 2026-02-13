@@ -22,12 +22,38 @@ import ProtectedRoute from './components/ProtectedRoute';
   }
 />
 
+import { Menu } from 'lucide-react';
+import { useState } from 'react';
+
 const Layout = ({ children }) => {
   const { user } = useContext(AuthContext);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div className={`min-h-screen ${user ? 'pl-64' : ''}`}>
-      {children}
-      {user && <Sidebar />}
+    <div className={`min-h-screen bg-gray-50 flex flex-col ${user ? 'md:pl-64' : ''} transition-all duration-300`}>
+      {/* Mobile Header */}
+      {user && (
+        <div className="md:hidden fixed top-0 w-full bg-green-700 text-white z-50 p-4 flex items-center justify-between shadow-md">
+            <div className="flex items-center gap-2">
+                <button onClick={() => setSidebarOpen(true)} className="p-1 hover:bg-green-600 rounded-lg transition">
+                    <Menu size={24} />
+                </button>
+                <span className="font-bold text-lg">Agri-Gestion</span>
+            </div>
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-xs">
+                {user.name.charAt(0)}
+            </div>
+        </div>
+      )}
+      
+      {/* Spacer for fixed header on mobile */}
+      {user && <div className="md:hidden h-16 flex-shrink-0"></div>}
+
+      <div className="flex-grow">
+        {children}
+      </div>
+      
+      {user && <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />}
     </div>
   );
 };
