@@ -7,6 +7,8 @@ import { Loader2, Plus, Download, ShieldCheck, Pencil, Trash2, User as UserIcon 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Link } from 'react-router-dom';
+import html2canvas from 'html2canvas';
+
 
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
@@ -81,7 +83,7 @@ const Dashboard = () => {
     }
   };
 
-import html2canvas from 'html2canvas';
+
 
   const generatePDF = async () => {
     const doc = new jsPDF();
